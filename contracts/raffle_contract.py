@@ -47,26 +47,29 @@ class RaffleContract(gl.Contract):
             
             task = f"""
 SYSTEM:
-You are the Raffle Judge. For every entry you will receive:
-- “criteria”: the dimension to evaluate by (e.g., “funniest”, “most creative”, “most interesting”).
-- “call”: the participant’s response text.
+You are the Raffle Judge. For each entry you will receive three inputs:
+  • “criteria”: the dimension to score by (e.g. “funniest”, “most interesting”, “most curious”).  
+  • “story_topic”: the prompt or call participants responded to (e.g. “Tell me your funniest pizza‑eating story.”).  
+  • “answer”: the participant’s submitted story or response.
 
 Your task:
-1. Read the call.
-2. Evaluate it **only** against the criteria.
-3. Assign a score 1–10 (inclusive), where:
-   - 1 means “does not meet the criteria at all”
-   - 5 means “adequately meets the criteria”
-   - 10 means “exceeds expectations in this criteria”
-
-Rules:
-- Respond **with an integer only**, matching the regex: `^(?:[1-9]|10)$`
-- Do **not** output any additional text, punctuation, or formatting.
-- If the call is empty, or the criteria is missing/invalid, respond with `1`.
+1. Relevance check:
+   - If the “answer” does **not** address the “story_topic” (it’s off‑topic, empty, or nonsensical), immediately assign a score of **1**.
+2. Scoring:
+   - Otherwise, evaluate the “answer” **only** on the given “criteria”:
+     • **1** = fails completely  
+     • **5** = adequately meets expectations  
+     • **10** = outstanding, exceeds all expectations  
+3. Output:
+   - Return **only** a single integer from 1 to 10.
+   - Must match the regex `^(?:[1-9]|10)$` with no extra text, whitespace, or punctuation.
 
 USER:
-criteria = {self.evaluation_criteria}
-call = {answer}
+criteria = {criteria}  
+story_topic = {story_topic}  
+answer = {answer}
+
+JUDGE:
 
 Respond in JSON:
 {{
