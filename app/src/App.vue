@@ -1,16 +1,7 @@
 <template>
-  <Suspense>
-    <template #default>
-      <BetsScreen />
-    </template>
-    <template #fallback>
-      <div class="flex items-center justify-center h-screen">
-        <div class="spinner">Loading...</div>
-      </div>
-    </template>
-  </Suspense>
+  <router-view />
 </template>
 
 <script setup>
-import BetsScreen from "./components/BetsScreen.vue";
+// No necesitas importar los screens aquí
 </script>
