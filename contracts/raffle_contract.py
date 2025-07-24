@@ -90,4 +90,4 @@ JUDGE:
         result_json = json.loads(gl.eq_principle.strict_eq(llm_evaluate_answer))   
         print(result_json)
        
-        self.answers[address] = RaffleAnswer(answer=answer, address=address, score=result_json["answer"])
+        self.answers[address] = RaffleAnswer(answer=answer, address=address, score=str(result_json["answer"]))
