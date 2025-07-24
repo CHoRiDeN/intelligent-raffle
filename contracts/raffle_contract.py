@@ -53,7 +53,7 @@ class RaffleContract(gl.Contract):
         
         #need to parse all answers and for each:
         ## order by score
-        sorted_answers = sorted(self.answers.values(), key=lambda x: int(x.score), reverse=True)
+        sorted_answers = sorted(self.answers.values(), key=lambda x: float(x.score), reverse=True)
 
         # Get the first 4 answers
         top_4_answers = sorted_answers[:4]
@@ -127,9 +127,9 @@ You are an evaluator. Your task is to rate an answer based on a given topic and 
 
 Rules:
 1. If the answer is not related to the given topic at all, return 0.
-2. Otherwise, score from 0 to 10 based on how well the answer matches the criterion:
+2. Otherwise, score from 0 to 100 based on how well the answer matches the criterion:
    - 0 = does not meet the criterion at all (or unrelated).
-   - 10 = perfectly matches the criterion.
+   - 100 = perfectly matches the criterion.
    - Use intermediate values for partial matches.
 3. Output only a single number (integer or one decimal). Do not add any explanation or text.
 
@@ -139,7 +139,7 @@ Input:
 - Answer: {answer}
 
 Output:
-A single number between 0 and 10 (for example: `8.5`).
+A single number between 0 and 100 (for example: `85`).
 
 Respond in JSON:
 {{
