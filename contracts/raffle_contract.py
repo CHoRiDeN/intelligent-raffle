@@ -41,8 +41,10 @@ class RaffleContract(gl.Contract):
         self, answer: str
     ) -> None:
         address = gl.message.sender_address
-        #evaluate answer
-        task = f"""
+
+        def llm_evaluate_answer() -> str:
+            
+            task = f"""
 SYSTEM:
 You are the Raffle Judge. For every entry you will receive:
 - “criteria”: the dimension to evaluate by (e.g., “funniest”, “most creative”, “most interesting”).
@@ -74,8 +76,10 @@ nothing else. Don't include any other words or characters,
 your output must be only JSON without any formatting prefix or suffix.
 This result should be perfectly parsable by a JSON parser without errors.
         """
-        result = gl.exec_prompt(task).replace("```json", "").replace("```", "")
-        
-        return json.dumps(json.loads(result), sort_keys=True)
-        print(result)
+            result = gl.exec_prompt(task).replace("```json", "").replace("```", "")
+            return json.dumps(json.loads(result), sort_keys=True)
+
+        result_json = json.loads(gl.eq_principle_strict_eq(llm_evaluate_answer))   
+        print(result_json)
+       
         self.answers[address] = RaffleAnswer(answer=answer, address=address, score="0")
