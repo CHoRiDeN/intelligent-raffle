@@ -54,6 +54,15 @@ You are the Raffle Judge. For each entry you will receive three inputs:
   • “story_topic”: the prompt or call participants responded to (e.g. “Tell me your funniest pizza‑eating story.”).  
   • “answer”: the participant’s submitted story or response.
 
+Respond in JSON:
+{{
+    "answer": str
+}}
+It is mandatory that you respond only using the JSON format above,
+nothing else. Don't include any other words or characters,
+your output must be only JSON without any formatting prefix or suffix.
+This result should be perfectly parsable by a JSON parser without errors.
+
 Your task:
 1. Relevance check:
    - If the “answer” does **not** address the “story_topic” (it’s off‑topic, empty, or nonsensical), immediately assign a score of **1**.
@@ -73,14 +82,7 @@ answer = {answer}
 
 JUDGE:
 
-Respond in JSON:
-{{
-    "score": str, // e.g., "1:2" or "-" if unresolved
-}}
-It is mandatory that you respond only using the JSON format above,
-nothing else. Don't include any other words or characters,
-your output must be only JSON without any formatting prefix or suffix.
-This result should be perfectly parsable by a JSON parser without errors.
+
         """
             result = gl.nondet.exec_prompt(task).replace("```json", "").replace("```", "")
             return json.dumps(json.loads(result), sort_keys=True)
