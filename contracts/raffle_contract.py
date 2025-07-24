@@ -3,6 +3,7 @@
 
 from genlayer import *
 from dataclasses import dataclass
+import json
 
 @allow_storage
 @dataclass
@@ -79,7 +80,7 @@ This result should be perfectly parsable by a JSON parser without errors.
             result = gl.exec_prompt(task).replace("```json", "").replace("```", "")
             return json.dumps(json.loads(result), sort_keys=True)
 
-        result_json = json.loads(gl.eq_principle_strict_eq(llm_evaluate_answer))   
+        result_json = json.loads(gl.eq_principle.strict_eq(llm_evaluate_answer))   
         print(result_json)
        
         self.answers[address] = RaffleAnswer(answer=answer, address=address, score="0")
