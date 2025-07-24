@@ -42,6 +42,8 @@ class RaffleContract(gl.Contract):
         self, answer: str
     ) -> None:
         address = gl.message.sender_address
+        evaluation_criteria = self.evaluation_criteria
+        story_topic = self.story_topic
 
         def llm_evaluate_answer() -> str:
             
@@ -65,7 +67,7 @@ Your task:
    - Must match the regex `^(?:[1-9]|10)$` with no extra text, whitespace, or punctuation.
 
 USER:
-criteria = {criteria}  
+criteria = {evaluation_criteria}  
 story_topic = {story_topic}  
 answer = {answer}
 
@@ -80,7 +82,7 @@ nothing else. Don't include any other words or characters,
 your output must be only JSON without any formatting prefix or suffix.
 This result should be perfectly parsable by a JSON parser without errors.
         """
-            result = gl.exec_prompt(task).replace("```json", "").replace("```", "")
+            result = gl.nondet.exec_prompt(task).replace("```json", "").replace("```", "")
             return json.dumps(json.loads(result), sort_keys=True)
 
         result_json = json.loads(gl.eq_principle.strict_eq(llm_evaluate_answer))   
